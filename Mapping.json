@@ -1,0 +1,26 @@
+{
+  "mappings": {
+    "properties": {
+      "id": { "type": "keyword" },
+      "title": { "type": "text" },
+      "description": { "type": "text" },
+
+      "category": { "type": "keyword" },
+      "type": { "type": "keyword" },
+      "gradeRange": { "type": "keyword" },
+
+      "minAge": { "type": "integer" },
+      "maxAge": { "type": "integer" },
+      "price": { "type": "double" },
+
+      "nextSessionDate": {
+        "type": "date",
+        "format": "strict_date_optional_time||epoch_millis"
+      },
+
+      "suggest": {
+        "type": "completion"
+      }
+    }
+  }
+}

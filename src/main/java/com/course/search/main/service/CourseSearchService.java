@@ -2,7 +2,7 @@ package com.course.search.main.service;
 
 import java.io.IOException;
 
-
+import org.springframework.data.elasticsearch.core.query.Criteria.Operator;
 import org.springframework.stereotype.Service;
 
 import com.course.search.main.document.CourseDocument;
@@ -14,8 +14,10 @@ import co.elastic.clients.elasticsearch._types.ElasticsearchException;
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MultiMatchQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.TextQueryType;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.json.JsonData;
 import lombok.RequiredArgsConstructor;
@@ -39,26 +41,29 @@ public class CourseSearchService {
                 .multiMatch(mm -> mm
                     .query(request.getQ())
                     .fields("title", "description")
+                    .type(TextQueryType.BoolPrefix)
+                    .fuzziness("AUTO")
                 )
             );
         }
-
+        
         if (request.getCategory() != null) {
             bool.filter(f -> f
                 .term(t -> t
-                    .field("category")
+                    .field("category.keyword")
                     .value(request.getCategory())
                 )
             );
         }
 
         if (request.getType() != null) {
-            bool.filter(f -> f
-                .term(t -> t
-                    .field("type")
-                    .value(request.getType())
-                )
-            );
+        	 bool.must(m -> m
+        		        .multiMatch(mm -> mm
+        		            .query(request.getType())
+        		            .fields("title")
+        		            .type(TextQueryType.BoolPrefix)   // 🔥 KEY
+        		        )
+        		    );
         }
 
         if (request.getMinPrice() != null || request.getMaxPrice() != null) {

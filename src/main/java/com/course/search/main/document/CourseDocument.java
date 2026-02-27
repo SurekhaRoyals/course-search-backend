@@ -3,6 +3,7 @@ package com.course.search.main.document;
 import java.time.Instant;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.CompletionField;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -53,7 +54,8 @@ public class CourseDocument {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Instant nextSessionDate;
     
-    
+    @CompletionField
+    private String suggest;
     
     
     
