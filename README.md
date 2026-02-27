@@ -14,6 +14,7 @@ A Spring Boot application that indexes course data into Elasticsearch and expose
 - <a href="#5-call-search-endpoints">Search API Usage</a>
 - <a href="#6-autocomplete--fuzzy-search-bonus">Autocomplete & Fuzzy Search </a>
 - <a href="#7-project-structure">Project Structure</a>
+- <a href="#8-author-and-contact">Author & Contact</a>
 
 
 
@@ -131,7 +132,7 @@ curl http://localhost:9200/courses/_count
 <h2><a class="anchor" id="4-tech-stack"></a>4. Tech Stack</h2>
 
 ```bash
-- Java 17
+- Java 17+
 - Spring Boot
 - Spring Data Elasticsearch
 - Elasticsearch 8.x
@@ -154,19 +155,135 @@ GET /api/search
 
 ```
 
+- Expected Response:
+```bash
+{
+    "total": 50,
+    "courses": [
+        {
+            "id": "26",
+            "title": "Yoga for Kids",
+            "category": "Health",
+            "type": "COURSE",
+            "price": 249.0,
+            "nextSessionDate": "+57397-02-06T08:00:00Z"
+        },
+        {
+            "id": "1",
+            "title": "Math Basics",
+            "category": "Math",
+            "type": "COURSE",
+            "price": 299.0,
+            "nextSessionDate": "+57397-04-30T16:00:00Z"
+        },
+        {
+            "id": "6",
+            "title": "Science Explorers",
+            "category": "Science",
+            "type": "COURSE",
+            "price": 349.0,
+            "nextSessionDate": "+57400-02-15T12:00:00Z"
+        },
+        {
+            "id": "21",
+            "title": "English Grammar Basics",
+            "category": "Language",
+            "type": "COURSE",
+            "price": 349.0,
+            "nextSessionDate": "+57400-04-19T00:00:00Z"
+        },
+        {
+            "id": "36",
+            "title": "Dance Basics",
+            "category": "Dance",
+            "type": "COURSE",
+            "price": 299.0,
+            "nextSessionDate": "+57400-10-02T16:00:00Z"
+        },
+        {
+            "id": "2",
+            "title": "Fun with Numbers",
+            "category": "Math",
+            "type": "CLUB",
+            "price": 249.0,
+            "nextSessionDate": "+57402-12-03T08:00:00Z"
+        },
+        {
+            "id": "13",
+            "title": "Crafts & DIY Club",
+            "category": "Art",
+            "type": "CLUB",
+            "price": 299.0,
+            "nextSessionDate": "+57403-05-19T00:00:00Z"
+        },
+        {
+            "id": "5",
+            "title": "Mental Math Club",
+            "category": "Math",
+            "type": "CLUB",
+            "price": 399.0,
+            "nextSessionDate": "+57405-06-07T00:00:00Z"
+        },
+        {
+            "id": "31",
+            "title": "Music Basics",
+            "category": "Music",
+            "type": "COURSE",
+            "price": 349.0,
+            "nextSessionDate": "+57405-10-10T00:00:00Z"
+        },
+        {
+            "id": "25",
+            "title": "Reading Club",
+            "category": "Language",
+            "type": "CLUB",
+            "price": 299.0,
+            "nextSessionDate": "+57408-04-13T16:00:00Z"
+        }
+    ]
+}
+
+```
+
 ### Call Search Endpoints
 
 - Example: Keyword Search + Sorting
 
 ```bash
-curl "http://localhost:8080/api/search?q=math&minAge=6&sort=priceAsc"
+curl "http://localhost:8080/api/search?q=math&sort=priceAsc"
+
+```
+
+- Expexcted Response:
+```bash
+{
+    "total": 2,
+    "courses": [
+        {
+            "id": "1",
+            "title": "Math Basics",
+            "category": "Math",
+            "type": "COURSE",
+            "price": 299.0,
+            "nextSessionDate": "+57397-04-30T16:00:00Z"
+        },
+        {
+            "id": "5",
+            "title": "Mental Math Club",
+            "category": "Math",
+            "type": "CLUB",
+            "price": 399.0,
+            "nextSessionDate": "+57405-06-07T00:00:00Z"
+        }
+    ]
+}
 
 ```
 
 - Example: Filter by Category and Type
 
 ```bash
-curl "http://localhost:8080/api/search?category=Science&type=COURSE"
+curl "http://localhost:8080/api/search?category=Math&type=CLUB"
 
 ```
 
@@ -174,17 +291,19 @@ curl "http://localhost:8080/api/search?category=Science&type=COURSE"
 
 ```bash
 {
-  "total": 12,
-  "courses": [
-    {
-      "id": "course-21",
-      "title": "Fun Math Adventures",
-      "category": "Math",
-      "price": 299.0,
-      "nextSessionDate": "2025-06-12T10:00:00Z"
-    }
-  ]
+    "total": 1,
+    "courses": [
+        {
+            "id": "5",
+            "title": "Mental Math Club",
+            "category": "Math",
+            "type": "CLUB",
+            "price": 399.0,
+            "nextSessionDate": "+57405-06-07T00:00:00Z"
+        }
+    ]
 }
+
 ```
 
 
@@ -195,11 +314,6 @@ curl "http://localhost:8080/api/search?category=Science&type=COURSE"
 
 
 - Autocomplete API Endpoint
-
-```bash
-GET /api/search/suggest
-
-```
 
 Example:
 
@@ -223,7 +337,26 @@ Response:
 The search endpoint supports fuzzy matching for typos.
 
 ```bash
-curl "http://localhost:8080/api/search?q=dinors"
+curl "http://localhost:8080/api/search?q=Chemist"
+
+```
+
+Expected Response:
+
+```bash
+{
+    "total": 1,
+    "courses": [
+        {
+            "id": "8",
+            "title": "Chemistry Lab Basics",
+            "category": "Science",
+            "type": "COURSE",
+            "price": 699.0,
+            "nextSessionDate": "+57433-07-20T20:00:00Z"
+        }
+    ]
+}
 
 ```
 
@@ -287,3 +420,10 @@ src/main/resources
 The project follows a layered architecture where controllers handle API requests,
 services contain business logic, repositories interact with Elasticsearch, and
 DTOs are used for clean request and response models.
+
+
+<h2><a class="anchor" id="8-author-and-contact"></a>8. Author & Contact</h2>
+
+**Surekha Endla**
+- Email: surekhaendla@gmail.com
+- LinkedIn: https://www.linkedin.com/in/surekhaendla/
