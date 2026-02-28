@@ -46,7 +46,7 @@ public class CourseSearchService {
                 )
             );
         }
-        
+       
         if (request.getCategory() != null) {
             bool.filter(f -> f
                 .term(t -> t
@@ -61,7 +61,7 @@ public class CourseSearchService {
         		        .multiMatch(mm -> mm
         		            .query(request.getType())
         		            .fields("title")
-        		            .type(TextQueryType.BoolPrefix)   // 🔥 KEY
+        		            .type(TextQueryType.BoolPrefix)   
         		        )
         		    );
         }
