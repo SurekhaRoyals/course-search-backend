@@ -40,7 +40,7 @@ public class CourseSearchService {
             bool.must(m -> m
                 .multiMatch(mm -> mm
                     .query(request.getQ())
-                    .fields("title.text", "description.text")
+                    .fields("title", "description")
                     .type(TextQueryType.BoolPrefix)
                     .fuzziness("AUTO")
                 )
@@ -60,7 +60,7 @@ public class CourseSearchService {
         	 bool.must(m -> m
         		        .multiMatch(mm -> mm
         		            .query(request.getType())
-        		            .fields("title.text")
+        		            .fields("title")
         		            .type(TextQueryType.BoolPrefix)   
         		        )
         		    );
