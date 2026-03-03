@@ -11,6 +11,8 @@ public class CourseMapper {
 	                .title(doc.getTitle())
 	                .category(doc.getCategory())
 	                .type(doc.getType())
+	                .maxAge(doc.getMaxAge())
+	                .minAge(doc.getMinAge())
 	                .price(doc.getPrice())
 	                .nextSessionDate(doc.getNextSessionDate())
 	                .build();

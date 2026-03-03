@@ -1,8 +1,8 @@
 package com.course.search.main.service;
 
 import java.io.IOException;
+import java.util.List;
 
-import org.springframework.data.elasticsearch.core.query.Criteria.Operator;
 import org.springframework.stereotype.Service;
 
 import com.course.search.main.document.CourseDocument;
@@ -46,6 +46,7 @@ public class CourseSearchService {
                 )
             );
         }
+        
        
         if (request.getCategory() != null) {
             bool.filter(f -> f
@@ -64,6 +65,27 @@ public class CourseSearchService {
         		            .type(TextQueryType.BoolPrefix)   
         		        )
         		    );
+        }
+        
+        if (request.getMinAge() != null || request.getMaxAge() != null) {
+
+            if (request.getMaxAge() != null) {
+                bool.filter(f -> f
+                    .range(r -> r
+                        .field("minAge")
+                        .lte(JsonData.of(request.getMaxAge()))
+                    )
+                );
+            }
+
+            if (request.getMinAge() != null) {
+                bool.filter(f -> f
+                    .range(r -> r
+                        .field("maxAge")
+                        .gte(JsonData.of(request.getMinAge()))
+                    )
+                );
+            }
         }
 
         if (request.getMinPrice() != null || request.getMaxPrice() != null) {
@@ -118,5 +140,29 @@ public class CourseSearchService {
                 }),
                 CourseDocument.class
         );
+    }
+    
+    public List<String> suggest(String q) throws IOException {
+        if (q == null || q.isBlank()) {
+            return List.of();
+        }
+
+        var response = client.search(s -> s
+                .index("courses")
+                .query(qr -> qr
+                    .multiMatch(mm -> mm
+                        .query(q)
+                        .fields("title")
+                        .type(TextQueryType.BoolPrefix)
+                    )
+                )
+                .size(10),
+            CourseDocument.class
+        );
+
+        return response.hits().hits().stream()
+                .map(hit -> hit.source().getTitle())
+                .distinct()
+                .toList();
     }
 }

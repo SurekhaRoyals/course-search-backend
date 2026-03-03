@@ -48,30 +48,10 @@ public class CourseSearchController {
     }
     
     
+    
     @GetMapping("/suggest")
     public List<String> suggest(@RequestParam String q) throws Exception {
-        if (q == null || q.isBlank()) {
-            return List.of();
-        }
-
-        var response = client.search(s -> s
-            .index("courses")
-            .query(qr -> qr
-                .multiMatch(mm -> mm
-                    .query(q)
-                    .fields("title")
-                    .type(TextQueryType.BoolPrefix)
-                    .fuzziness("AUTO")
-                )
-            )
-            .size(10),
-            CourseDocument.class
-        );
-
-        return response.hits().hits().stream()
-            .map(hit -> hit.source().getTitle())
-            .distinct()
-            .toList();
+        return service.suggest(q);
     }
     
     

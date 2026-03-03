@@ -18,6 +18,8 @@ public class CourseResponseDTO {
     private String title;
     private String category;
     private String type;
+    private Integer minAge;
+    private Integer maxAge;
     private double price;
     private Instant nextSessionDate;
 
