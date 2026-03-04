@@ -4,11 +4,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
-@SpringBootApplication(exclude = {
+@SpringBootApplication( exclude = { 
         org.springframework.boot.elasticsearch.autoconfigure.ElasticsearchClientAutoConfiguration.class
-    })
+   })
 @EnableElasticsearchRepositories(
-        basePackages = "com.course.search.main.repository"
+       basePackages = "com.course.search.main.repository"
 )
 public class CourseSearchApplication {
 

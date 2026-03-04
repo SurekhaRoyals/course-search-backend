@@ -7,16 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.course.search.main.document.CourseDocument;
 import com.course.search.main.dto.SearchRequestDTO;
-//import com.course.search.main.repository.CourseRepository;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.elasticsearch._types.ElasticsearchException;
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
-import co.elastic.clients.elasticsearch._types.query_dsl.MultiMatchQuery;
-import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
-import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery;
-import co.elastic.clients.elasticsearch._types.query_dsl.TermQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TextQueryType;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.json.JsonData;

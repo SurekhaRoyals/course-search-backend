@@ -8,15 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.course.search.main.document.CourseDocument;
 import com.course.search.main.dto.SearchRequestDTO;
 import com.course.search.main.dto.SearchResponseDTO;
 import com.course.search.main.mapper.CourseMapper;
 import com.course.search.main.service.CourseSearchService;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.elasticsearch._types.query_dsl.TextQueryType;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/search")
